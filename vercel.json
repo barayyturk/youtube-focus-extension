@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://barayyturk.github.io/youtube-focus-extension/",
+      "permanent": true
+    }
+  ]
+}
