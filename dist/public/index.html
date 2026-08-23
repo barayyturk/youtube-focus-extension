@@ -246,7 +246,17 @@
             document.body.removeChild(clone);
           }
         });
-
+// The header logo renders as <a class="brand" href="/" aria-label="YouTube Focus home">.
+// This is a single-page site, so "go home" just reloads the same page — disable it.
+document.addEventListener(
+  'click',
+  function (e) {
+    var el = e.target.closest('a.brand');
+    if (!el) return;
+    e.preventDefault();
+  },
+  true
+);
         // The React bundle renders the real button as:
         // <a class="download-button" data-testid="link-download-extension" href="./YouTube-Focus-Extension-v0.1.0.zip" download>
         // Since the app mounts client-side, delegate the listener on document
