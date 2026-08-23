@@ -18,23 +18,104 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" crossorigin src="./assets/index-D1YLAfm9.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-DzipqqJk.css">
+    <style>
+      .install-section {
+        border-top: 1px solid var(--line);
+        width: min(100%, 1120px);
+        margin: 0 auto;
+        padding: 64px clamp(24px, 5vw, 80px) 80px;
+      }
+      .install-inner { max-width: 720px; }
+      .install-eyebrow { color: var(--teal-dark); }
+      .install-eyebrow svg { color: var(--teal); }
+      .install-section h2 {
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: -0.04em;
+        margin: 18px 0 12px;
+        font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+        line-height: 1.1;
+      }
+      .install-intro {
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 0 40px;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+      .install-steps {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+      }
+      .install-steps li { min-width: 0; }
+      .install-steps .fact-number { display: block; margin-bottom: 10px; }
+      .install-steps h3 {
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+      .install-steps p {
+        color: var(--muted);
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.65;
+      }
+      .install-steps code {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 6px;
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        color: var(--ink);
+      }
+      @media (max-width: 720px) {
+        .install-steps { grid-template-columns: 1fr; gap: 26px; }
+      }
+      .download-page > .site-footer { display: none; }
+      .install-section > .site-footer { margin-top: 56px; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    <section style="max-width:640px;margin:0 auto;padding:48px 24px 80px;font-family:'Inter',sans-serif;color:#202238;">
-      <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:20px;">Install the extension</h2>
-      <ol style="padding-left:20px;line-height:1.7;">
-        <li style="margin-bottom:12px;">
-          <strong>Download</strong> the ZIP file above and unzip it on your computer.
-        </li>
-        <li style="margin-bottom:12px;">
-          Open Chrome, go to <code style="background:#f5f1e9;padding:2px 6px;border-radius:4px;">chrome://extensions</code>, and turn on <strong>Developer mode</strong> (top right toggle).
-        </li>
-        <li style="margin-bottom:12px;">
-          Click <strong>Load unpacked</strong> and select the unzipped folder.
-        </li>
-      </ol>
-      <p style="color:#6e707b;margin-top:16px;">That's it — the extension icon will appear in your Chrome toolbar.</p>
+
+    <section class="install-section" aria-labelledby="install-title">
+      <div class="install-inner">
+        <div class="eyebrow install-eyebrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="m19 15-7 7-7-7"/></svg>
+          <span>Getting started</span>
+        </div>
+        <h2 id="install-title">Install in under a minute</h2>
+        <p class="install-intro">Chrome doesn't have this in the Web Store yet, so it loads as an unpacked extension. It only takes three steps.</p>
+
+        <ol class="install-steps">
+          <li>
+            <span class="fact-number">01</span>
+            <h3>Download &amp; unzip</h3>
+            <p>Grab the ZIP above, then unzip it anywhere on your computer &mdash; you'll point Chrome at that folder next.</p>
+          </li>
+          <li>
+            <span class="fact-number">02</span>
+            <h3>Turn on developer mode</h3>
+            <p>Open <code>chrome://extensions</code> in a new tab and flip the <strong>Developer mode</strong> toggle in the top-right corner.</p>
+          </li>
+          <li>
+            <span class="fact-number">03</span>
+            <h3>Load unpacked</h3>
+            <p>Click <strong>Load unpacked</strong> and select the unzipped folder. The extension appears in your toolbar right away.</p>
+          </li>
+        </ol>
+      </div>
+
+      <footer class="site-footer">
+        <span>YouTube Focus Extension</span>
+        <span>Open source &middot; free to run</span>
+      </footer>
     </section>
   </body>
 </html>
