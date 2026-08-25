@@ -12,14 +12,266 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="YouTube Focus Extension" />
     <meta name="twitter:description" content="A free local-first Chrome extension for staying focused on YouTube." />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-D1YLAfm9.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DzipqqJk.css">
+    <script type="module" crossorigin src="./assets/index-D1YLAfm9.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DzipqqJk.css">
+    <style>
+      a.brand { cursor: default; pointer-events: none; }
+      .install-section {
+        border-top: 1px solid var(--line);
+        width: min(100%, 1120px);
+        margin: 0 auto;
+        padding: 64px clamp(24px, 5vw, 80px) 80px;
+      }
+      .install-inner { max-width: 720px; }
+      .install-eyebrow { color: var(--teal-dark); }
+      .install-eyebrow svg { color: var(--teal); }
+      .install-section h2 {
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: -0.04em;
+        margin: 18px 0 12px;
+        font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+        line-height: 1.1;
+      }
+      .install-intro {
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 0 40px;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+      .install-steps {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+      }
+      .install-steps li { min-width: 0; }
+      .install-steps .fact-number { display: block; margin-bottom: 10px; }
+      .install-steps h3 {
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+      .install-steps p {
+        color: var(--muted);
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.65;
+      }
+      .install-steps code {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 6px;
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        color: var(--ink);
+      }
+      @media (max-width: 720px) {
+        .install-steps { grid-template-columns: 1fr; gap: 26px; }
+      }
+      .download-page > .site-footer { display: none; }
+      .install-section > .site-footer { margin-top: 56px; }
+
+      /* ---- Pre-download warning modal ---- */
+      .yf-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(20, 22, 24, 0.5);
+        backdrop-filter: blur(2px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.18s ease;
+        z-index: 1000;
+      }
+      .yf-overlay.open { opacity: 1; pointer-events: auto; }
+      .yf-modal {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        max-width: 440px;
+        width: 100%;
+        max-height: 88vh;
+        overflow-y: auto;
+        padding: 28px 26px 24px;
+        transform: translateY(10px) scale(0.98);
+        transition: transform 0.18s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        font-family: "Inter", sans-serif;
+      }
+      .yf-overlay.open .yf-modal { transform: translateY(0) scale(1); }
+      .yf-modal-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .yf-modal-head h2 {
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: -0.03em;
+        font-size: 18px;
+        margin: 0;
+        color: var(--ink);
+      }
+      .yf-warn-icon { flex: none; width: 22px; height: 22px; color: var(--teal-dark); }
+      .yf-modal p.yf-lead {
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.55;
+        margin: 8px 0 20px;
+      }
+      .yf-steps { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+      .yf-steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; line-height: 1.5; color: var(--ink); }
+      .yf-num {
+        flex: none; width: 22px; height: 22px; border-radius: 50%;
+        background: var(--ink); color: #fff; font-family: "DM Mono", monospace;
+        font-size: 11px; display: flex; align-items: center; justify-content: center;
+      }
+      .yf-steps b { color: var(--teal-dark); }
+      .yf-steps code {
+        background: var(--paper); border: 1px solid var(--line); border-radius: 5px;
+        padding: 1px 6px; font-family: "DM Mono", monospace; font-size: 12px; color: var(--ink);
+      }
+      .yf-modal-actions { display: flex; gap: 10px; }
+      .yf-btn-secondary, .yf-btn-primary {
+        flex: 1; border: none; border-radius: 8px; padding: 12px 14px;
+        font-size: 14px; font-weight: 600; font-family: "Inter", sans-serif; cursor: pointer;
+      }
+      .yf-btn-secondary { background: var(--paper); color: var(--ink); border: 1px solid var(--line); }
+      .yf-btn-secondary:hover { background: var(--line); }
+      .yf-btn-primary { background: var(--teal); color: #fff; }
+      .yf-btn-primary:hover { background: var(--teal-dark); }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <section class="install-section" aria-labelledby="install-title">
+      <div class="install-inner">
+        <div class="eyebrow install-eyebrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="m19 15-7 7-7-7"/></svg>
+          <span>Getting started</span>
+        </div>
+        <h2 id="install-title">Install in under a minute</h2>
+        <p class="install-intro">Chrome doesn't have this in the Web Store yet, so it loads as an unpacked extension. It only takes three steps.</p>
+
+        <ol class="install-steps">
+          <li>
+            <span class="fact-number">01</span>
+            <h3>Download &amp; unzip</h3>
+            <p>Grab the ZIP above, then unzip it anywhere on your computer &mdash; you'll point Chrome at that folder next.</p>
+          </li>
+          <li>
+            <span class="fact-number">02</span>
+            <h3>Turn on developer mode</h3>
+            <p>Open <code>chrome://extensions</code> in a new tab and flip the <strong>Developer mode</strong> toggle in the top-right corner.</p>
+          </li>
+          <li>
+            <span class="fact-number">03</span>
+            <h3>Load unpacked</h3>
+            <p>Click <strong>Load unpacked</strong> and select the unzipped folder. The extension appears in your toolbar right away.</p>
+          </li>
+        </ol>
+      </div>
+
+      <footer class="site-footer">
+        <span>YouTube Focus Extension</span>
+        <span>Made by Barayturk Aydin</span>
+      </footer>
+    </section>
+
+    <div class="yf-overlay" id="yfOverlay">
+      <div class="yf-modal" role="dialog" aria-modal="true" aria-labelledby="yfModalTitle">
+        <div class="yf-modal-head">
+          <h2 id="yfModalTitle">Before you install</h2>
+          <svg class="yf-warn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <p class="yf-lead">This isn't on the Chrome Web Store, so Chrome needs the unzipped folder, not the zip itself. Quick heads up before you download:</p>
+        <ol class="yf-steps">
+          <li><span class="yf-num">1</span><span><b>Unzip the file</b> after it downloads &mdash; don't open the zip and drag files out, or Chrome won't find <code>manifest.json</code>.</span></li>
+          <li><span class="yf-num">2</span><span>Go to <code>chrome://extensions</code> and turn on <b>Developer mode</b></span></li>
+          <li><span class="yf-num">3</span><span>Click <b>Load unpacked</b> and select the unzipped folder &mdash; the one with <code>manifest.json</code> directly inside it.</span></li>
+        </ol>
+        <div class="yf-modal-actions">
+          <button class="yf-btn-secondary" id="yfCancel">Cancel</button>
+          <button class="yf-btn-primary" id="yfConfirm">Got it — download</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var overlay = document.getElementById('yfOverlay');
+        var cancelBtn = document.getElementById('yfCancel');
+        var confirmBtn = document.getElementById('yfConfirm');
+        var pendingLink = null;
+
+        function openModal(link) {
+          pendingLink = link;
+          overlay.classList.add('open');
+        }
+        function closeModal() {
+          overlay.classList.remove('open');
+          pendingLink = null;
+        }
+
+        cancelBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', function (e) {
+          if (e.target === overlay) closeModal();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeModal();
+        });
+        confirmBtn.addEventListener('click', function () {
+          var link = pendingLink;
+          closeModal();
+          if (link) {
+            var clone = document.createElement('a');
+            clone.href = link.href;
+            clone.download = link.getAttribute('download') || '';
+            document.body.appendChild(clone);
+            clone.click();
+            document.body.removeChild(clone);
+          }
+        });
+// The header logo renders as <a class="brand" href="/" aria-label="YouTube Focus home">.
+// This is a single-page site, so "go home" just reloads the same page — disable it.
+document.addEventListener(
+  'click',
+  function (e) {
+    var el = e.target.closest('a.brand');
+    if (!el) return;
+    e.preventDefault();
+  },
+  true
+);
+        // The React bundle renders the real button as:
+        // <a class="download-button" data-testid="link-download-extension" href="./YouTube-Focus-Extension-v0.1.0.zip" download>
+        // Since the app mounts client-side, delegate the listener on document
+        // rather than binding directly to the (not-yet-rendered) button.
+        document.addEventListener(
+          'click',
+          function (e) {
+            var el = e.target.closest('[data-testid="link-download-extension"], a.download-button');
+            if (!el) return;
+            e.preventDefault();
+            openModal(el);
+          },
+          true
+        );
+      })();
+    </script>
   </body>
 </html>
